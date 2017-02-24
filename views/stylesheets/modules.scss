@@ -1,0 +1,43 @@
+.button {
+  background: #f44336;
+  color: white;
+  display: inline-block;
+  padding: 15px 35px;
+}
+
+.button:hover {
+  background: #DA3C30;
+  cursor: pointer;
+}
+
+.input {
+  display: block;
+}
+
+
+.section--top {
+  background: #f44336;
+  padding: 250px 0;
+}
+
+.section--top__tag {
+  color: white;
+  font-size: 46px;
+  text-align: center;
+}
+
+.section--login {
+  margin: 0 auto;
+  width: 400px;
+}
+
+.section--login__title {
+  font-size: 24px;
+  margin: 25px 0;
+}
+
+
+.section--login .input, .section--login .button {
+  margin: 15px 0;
+  width: 100%;
+}
