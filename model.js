@@ -39,6 +39,7 @@ function read(collectionName, filter, callback) {
 // Public functions
 
 function createEntry(user, store, data) {
+  data._user = user;
   data._store = store;
   create("entries", data);
 }

@@ -81,8 +81,3 @@ app.listen(process.env.PORT || 3000, function() {
   console.log("# " + pjson.name + " " + pjson.version + "\n");
   console.log('Web Server Port: 3000');
 });
-
-
-controller.getEntries("58f43a23d59454bb1d822fbf", "58f43c61d59454bb1d822fc1", function(docs) {
-  console.log(docs);
-});

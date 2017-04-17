@@ -77,7 +77,12 @@ function authorise(user, token, succcess, failure) {
   });
 }
 
-// TODO: Add addEntry function
+function addEntry(user, store, data) {
+  model.hasStore(model.ObjectId(user), model.ObjectId(store), function() {
+    model.createEntry(model.ObjectId(user), model.ObjectId(store), data);
+  }, function() {
+  });
+}
 
 function getEntries(user, store, callback) {
   model.hasStore(model.ObjectId(user), model.ObjectId(store), function() {
@@ -100,5 +105,6 @@ function getStores(owner, callback) {
 
 exports.login = login;
 exports.authorise = authorise;
+exports.addEntry = addEntry;
 exports.getEntries = getEntries;
 exports.getStores = getStores;
