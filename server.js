@@ -4,7 +4,15 @@ var app = express();
 var model = require("./model.js");
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/views/index.html'));
+  res.sendFile(path.join(__dirname + '/views/login.html'));
+});
+
+app.get('/login', function(req, res) {
+  res.sendFile(path.join(__dirname + '/views/login.html'));
+});
+
+app.get('/app', function(req, res) {
+  res.sendFile(path.join(__dirname + '/views/app.html'));
 });
 
 app.get("/store", function(req, res) {
@@ -20,7 +28,7 @@ app.get("/store", function(req, res) {
 
 app.get("/entries", function(req, res) {
   if(req.query._user != null && req.query._store != null) {
-    
+
   } else {
     res.send("Error");
   }

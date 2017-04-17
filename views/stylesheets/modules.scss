@@ -11,7 +11,9 @@
 }
 
 .input {
+  border: #CCC solid 1px;
   display: block;
+  margin: 10px 0;
 }
 
 
@@ -38,6 +40,10 @@
 
 
 .section--login .input, .section--login .button {
-  margin: 15px 0;
+  padding: 15px 10px;
   width: 100%;
+}
+
+.section--login .button {
+  text-align: center;
 }
