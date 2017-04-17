@@ -37,6 +37,7 @@ app.get('/app', function(req, res) {
 
 app.get("/entries", function(req, res) {
   if(req.query._user != null && req.query._store != null) {
+    // TODO: Check for authorisation
     console.log(controller.getEntries(req.query._user, req.query._store));
     res.send("200");
     // TODO: Send entries as response
@@ -66,7 +67,11 @@ app.get("/stores", function(req, res) {
 
 // TODO: Add POST /sessions request that calls controller.login
 
-// TODO: Add POST /users request that calls controller.registerUser
+// TODO: Add POST /users request that calls controller.register
+
+/*
+  ## Server start code
+*/
 
 app.use(express.static('views'));
 

@@ -48,22 +48,6 @@ function generateToken() {
   return generateString(32);
 }
 
-
-function registerUser(email, password) {
-  var salt = generateSalt();
-  model.createUser(email, password, salt);
-}
-
-function validateToken(user, token, succcess, failure) {
-  model.readSessionByUserToken(user, token, function(sessions) {
-    if(sessions.length > 0 && sessions[0].expiry >= getTimestamp()) {
-      succcess();
-    } else {
-      failure();
-    }
-  });
-}
-
 /*
   ## Public Functions
 */
@@ -93,17 +77,24 @@ function authorise(user, token, succcess, failure) {
   });
 }
 
+// TODO: Add addEntry function
+
 function getEntries(user, token, store, callback) {
   if(validateToken(user, token)) {
     model.readEntries(user, store, callback);
   }
 }
 
+// TODO: Add addStore function
+
 function getStores(owner, callback) {
   model.readStores(model.ObjectId(owner), function(docs) {
     callback(docs);
   });
 }
+
+// TODO: Add register function
+
 
 exports.login = login;
 exports.authorise = authorise;
