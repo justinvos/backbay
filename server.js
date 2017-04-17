@@ -10,8 +10,19 @@ var controller = require("./controller.js");
 var pjson = require('./package.json');
 
 /*
-  # Routes
+  ## Helper Functions
+*/
 
+function hasParameters(query, parameters) {
+  for(var i = 0; i < parameters.length; i++) {
+    if(query[parameters[i]] == null) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/*
   ## HTML View Routes
 */
 
@@ -36,7 +47,7 @@ app.get('/app', function(req, res) {
 */
 
 app.get("/entries", function(req, res) {
-  if(req.query._user != null && req.query.token && req.query._store != null) {
+  if(hasParameters(req.query, ["_user", "token", "_store"])) {
     controller.authorise(req.query._user, req.query.token, function() {
       controller.getEntries(req.query._user, req.query._store, function(docs) {
         res.send(docs);
@@ -52,7 +63,7 @@ app.get("/entries", function(req, res) {
 // TODO: Add POST /entries request that calls controller.addEntry
 
 app.get("/stores", function(req, res) {
-  if(req.query._owner != null && req.query.token != null) {
+  if(hasParameters(req.query, ["_owner", "token"])) {
     controller.authorise(req.query._owner, req.query.token, function() {
       controller.getStores(req.query._owner, function(docs) {
         res.send(docs);
