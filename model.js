@@ -1,8 +1,13 @@
+/*
+  Project: backbay
+  Author: Justin Vos
+*/
+
 var mongodb = require("mongodb");
 var MongoClient = mongodb.MongoClient;
 var ObjectId = mongodb.ObjectId;
 
-var url = 'mongodb://localhost:27017/backbay';
+var url = 'mongodb://backbay:NIRJKVpmLlDNdi0Z@cluster0-shard-00-00-efb7y.mongodb.net:27017,cluster0-shard-00-01-efb7y.mongodb.net:27017,cluster0-shard-00-02-efb7y.mongodb.net:27017/backbay?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin';
 
 // Private functions
 
@@ -44,20 +49,20 @@ function readEntries(user, store, callback) {
   }
 }
 
-function createStore(user, label) {
-  create("stores", {_user: user, label: label});
+function createStore(owner, label) {
+  create("stores", {_owner: owner, label: label});
 }
 
-function readStores(user, callback) {
-  read("stores", {_user: user}, callback);
+function readStores(owner, callback) {
+  read("stores", {_owner:owner}, callback);
 }
 
-function readStoresByLabel(user, label, callback) {
-  read("stores", {_user: user, label: label}, callback);
+function readStoresByLabel(owner, label, callback) {
+  read("stores", {_owner: owner, label: label}, callback);
 }
 
-function hasStore(user, store) {
-  read("stores", {_id: ObjectId(store), _user: user}, function(docs) {
+function hasStore(owner, store) {
+  read("stores", {_id: ObjectId(store), _owner: owner}, function(docs) {
     return docs.length > 0;
   });
 }
@@ -75,9 +80,10 @@ function createSession(user, token, expiry) {
 }
 
 function readSessionByUserToken(user, token, callback) {
-  read("sessions", {_user: user, token: token}, callback);
+  read("sessions", {_user: ObjectId(user), token: token}, callback);
 }
 
+exports.ObjectId = ObjectId;
 exports.createEntry = createEntry;
 exports.readEntries = readEntries;
 exports.createStore = createStore;
@@ -86,3 +92,5 @@ exports.readStoresByLabel = readStoresByLabel;
 exports.hasStore = hasStore;
 exports.createUser = createUser;
 exports.readUser = readUser;
+exports.createSession = createSession;
+exports.readSessionByUserToken = readSessionByUserToken;

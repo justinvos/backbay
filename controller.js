@@ -1,3 +1,8 @@
+/*
+  Project: backbay
+  Author: Justin Vos
+*/
+
 var crypto = require('crypto');
 var model = require("./model.js");
 
@@ -5,12 +10,12 @@ function getTimestamp() {
   return Date.now() / 1000;
 }
 
-function authenticate(email, password) {
+function authenticate(email, password, callback) {
   model.readUser(email, function(docs) {
     if(docs[0].password == md5(password + docs[0].salt)) {
-      return docs[0]._id;
+      callback(docs[0]._id);
     } else {
-      return null;
+      callback(null);
     }
   });
 }
@@ -22,7 +27,7 @@ function md5(string) {
 function generateString(len) {
   var set = '0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ',
     setLen = set.length,
-    salt = '',
+    salt = '';
 
   for (var i = 0; i < len; i++) {
     var p = Math.floor(Math.random() * setLen);
@@ -45,25 +50,29 @@ function registerUser(email, password) {
   model.createUser(email, password, salt);
 }
 
-function login(email, password) {
-  var user = authenticate(email, password);
-  if(user != null) {
-    var expiry = getTimestamp() + (3 * 60 * 60);
-    console.log(timestamp);
+function login(email, password, callback) {
+  authenticate(email, password, function(user) {
+    if(user != null) {
+      var expiry = Math.round(getTimestamp()) + (3 * 60 * 60);
+      console.log(expiry);
 
-    var token = generateToken();
+      var token = generateToken();
 
-    model.createSession(user, token, expiry);
-  }
-}
+      model.createSession(user, token, expiry);
 
-function validateToken(user, token) {
-  model.readSessionByUserToken(user, token, function(sessions) {
-    if(sessionDocs.length > 0 && sessions[0].expiry >= getTimestamp()) {
-      return true;
+      callback(user, token);
     }
   });
-  return false;
+}
+
+function validateToken(user, token, succcess, failure) {
+  model.readSessionByUserToken(user, token, function(sessions) {
+    if(sessions.length > 0 && sessions[0].expiry >= getTimestamp()) {
+      succcess();
+    } else {
+      failure(false);
+    }
+  });
 }
 
 function getEntries(user, token, store, callback) {
@@ -71,3 +80,11 @@ function getEntries(user, token, store, callback) {
     model.readEntries(user, store, callback);
   }
 }
+
+
+exports.generateSalt = generateSalt;
+exports.md5 = md5;
+exports.getEntries = getEntries;
+exports.login = login;
+exports.authenticate = authenticate;
+exports.validateToken = validateToken;
