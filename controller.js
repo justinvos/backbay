@@ -6,6 +6,10 @@
 var crypto = require('crypto');
 var model = require("./model.js");
 
+/*
+  Private Functions
+*/
+
 function getTimestamp() {
   return Date.now() / 1000;
 }
@@ -50,6 +54,20 @@ function registerUser(email, password) {
   model.createUser(email, password, salt);
 }
 
+function validateToken(user, token, succcess, failure) {
+  model.readSessionByUserToken(user, token, function(sessions) {
+    if(sessions.length > 0 && sessions[0].expiry >= getTimestamp()) {
+      succcess();
+    } else {
+      failure();
+    }
+  });
+}
+
+/*
+  ## Public Functions
+*/
+
 function login(email, password, callback) {
   authenticate(email, password, function(user) {
     if(user != null) {
@@ -65,12 +83,12 @@ function login(email, password, callback) {
   });
 }
 
-function validateToken(user, token, succcess, failure) {
+function authorise(user, token, succcess, failure) {
   model.readSessionByUserToken(user, token, function(sessions) {
     if(sessions.length > 0 && sessions[0].expiry >= getTimestamp()) {
       succcess();
     } else {
-      failure(false);
+      failure();
     }
   });
 }
@@ -81,10 +99,13 @@ function getEntries(user, token, store, callback) {
   }
 }
 
+function getStores(owner, callback) {
+  model.readStores(model.ObjectId(owner), function(docs) {
+    callback(docs);
+  });
+}
 
-exports.generateSalt = generateSalt;
-exports.md5 = md5;
-exports.getEntries = getEntries;
 exports.login = login;
-exports.authenticate = authenticate;
-exports.validateToken = validateToken;
+exports.authorise = authorise;
+exports.getEntries = getEntries;
+exports.getStores = getStores;

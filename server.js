@@ -6,7 +6,6 @@
 var express = require('express');
 var path = require('path');
 var app = express();
-var model = require("./model.js");
 var controller = require("./controller.js");
 var pjson = require('./package.json');
 
@@ -36,45 +35,38 @@ app.get('/app', function(req, res) {
   ## Web API Routes
 */
 
-app.get("/store", function(req, res) {
-  if(req.query._key != null) {
-    res.send("200");
-  } else {
-    res.send("400");
-  }
-  model.readStores(1, function(docs) {
-    console.log(docs);
-  });
-});
-
 app.get("/entries", function(req, res) {
   if(req.query._user != null && req.query._store != null) {
     console.log(controller.getEntries(req.query._user, req.query._store));
     res.send("200");
-  } else {
-    res.send("Error");
-  }
-});
-
-app.post("/entries", function(req, res) {
-  if(req.query._user != null && req.query._store != null) {
+    // TODO: Send entries as response
 
   } else {
     res.send("Error");
   }
 });
+
+// TODO: Add POST /entries request that calls controller.addEntry
 
 app.get("/stores", function(req, res) {
-  if(req.query._owner != null) {
-    var owner = req.query._owner;
-    model.readStores(model.ObjectId(owner), function(docs) {
-      console.log(docs);
-      res.send(docs);
+  if(req.query._owner != null && req.query.token != null) {
+    controller.authorise(req.query._owner, req.query.token, function() {
+      controller.getStores(req.query._owner, function(docs) {
+        res.send(docs);
+      });
+    }, function() {
+      res.send("Error: Authorisation failed");
     });
   } else {
-    res.send("Error");
+    res.send("Error: The _owner or token parameters were not given");
   }
 });
+
+// TODO: Add POST /stores request that calls controller.addStore
+
+// TODO: Add POST /sessions request that calls controller.login
+
+// TODO: Add POST /users request that calls controller.registerUser
 
 app.use(express.static('views'));
 
@@ -82,16 +74,3 @@ app.listen(process.env.PORT || 3000, function() {
   console.log("# " + pjson.name + " " + pjson.version + "\n");
   console.log('Web Server Port: 3000');
 });
-
-/*
-Token validation example
-
-var user = "58f43a23d59454bb1d822fbf";
-var token = "CutU1Fs24hzPQYUrlGKJYSZfDkn74lbT";
-
-controller.validateToken(user, token, function() {
-  console.log("logged in");
-}, function() {
-  console.log("failed");
-});
-*/
