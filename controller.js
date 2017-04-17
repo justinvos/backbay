@@ -79,10 +79,12 @@ function authorise(user, token, succcess, failure) {
 
 // TODO: Add addEntry function
 
-function getEntries(user, token, store, callback) {
-  if(validateToken(user, token)) {
-    model.readEntries(user, store, callback);
-  }
+function getEntries(user, store, callback) {
+  model.hasStore(model.ObjectId(user), model.ObjectId(store), function() {
+    model.readEntries(model.ObjectId(user), model.ObjectId(store), callback);
+  }, function() {
+    callback([]);
+  });
 }
 
 // TODO: Add addStore function

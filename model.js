@@ -44,9 +44,7 @@ function createEntry(user, store, data) {
 }
 
 function readEntries(user, store, callback) {
-  if(hasStore(user, store)) {
-    read("entries", {_user: user, _store: store}, callback);
-  }
+  read("entries", {_user: user, _store: store}, callback);
 }
 
 function createStore(owner, label) {
@@ -61,9 +59,13 @@ function readStoresByLabel(owner, label, callback) {
   read("stores", {_owner: owner, label: label}, callback);
 }
 
-function hasStore(owner, store) {
-  read("stores", {_id: ObjectId(store), _owner: owner}, function(docs) {
-    return docs.length > 0;
+function hasStore(owner, store, succcess, failure) {
+  read("stores", {_id: store, _owner: owner}, function(docs) {
+    if(docs.length > 0) {
+      succcess();
+    } else {
+      failure();
+    }
   });
 }
 

@@ -36,14 +36,16 @@ app.get('/app', function(req, res) {
 */
 
 app.get("/entries", function(req, res) {
-  if(req.query._user != null && req.query._store != null) {
-    // TODO: Check for authorisation
-    console.log(controller.getEntries(req.query._user, req.query._store));
-    res.send("200");
-    // TODO: Send entries as response
-
+  if(req.query._user != null && req.query.token && req.query._store != null) {
+    controller.authorise(req.query._user, req.query.token, function() {
+      controller.getEntries(req.query._user, req.query._store, function(docs) {
+        res.send(docs);
+      });
+    }, function() {
+      res.send("Error: Authorisation failed");
+    });
   } else {
-    res.send("Error");
+    res.send("Error: The _user, token, or _store parameters were not given");
   }
 });
 
@@ -78,4 +80,9 @@ app.use(express.static('views'));
 app.listen(process.env.PORT || 3000, function() {
   console.log("# " + pjson.name + " " + pjson.version + "\n");
   console.log('Web Server Port: 3000');
+});
+
+
+controller.getEntries("58f43a23d59454bb1d822fbf", "58f43c61d59454bb1d822fc1", function(docs) {
+  console.log(docs);
 });
