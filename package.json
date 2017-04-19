@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/justinvos/backbay#readme",
   "dependencies": {
+    "body-parser": "^1.17.1",
     "express": "^4.14.1",
     "mongodb": "^2.2.25"
   }

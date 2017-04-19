@@ -52,7 +52,7 @@ function generateToken() {
   ## Public Functions
 */
 
-function login(email, password, callback) {
+function login(email, password, success, failure) {
   authenticate(email, password, function(user) {
     if(user != null) {
       var expiry = Math.round(getTimestamp()) + (3 * 60 * 60);
@@ -62,7 +62,9 @@ function login(email, password, callback) {
 
       model.createSession(user, token, expiry);
 
-      callback(user, token);
+      success(user, token);
+    } else {
+      failure();
     }
   });
 }

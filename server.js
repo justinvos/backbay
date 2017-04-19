@@ -3,11 +3,16 @@
   Author: Justin Vos
 */
 
-var express = require('express');
-var path = require('path');
+var bodyParser = require("body-parser");
+var express = require("express");
+var path = require("path");
 var app = express();
 var controller = require("./controller.js");
-var pjson = require('./package.json');
+var pjson = require("./package.json");
+
+
+app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.json())
 
 /*
   ## Helper Functions
@@ -78,7 +83,18 @@ app.get("/stores", function(req, res) {
 
 // TODO: Add POST /stores request that calls controller.addStore
 
-// TODO: Add POST /sessions request that calls controller.login
+app.post("/sessions", function(req, res) {
+  if(hasParameters(req.body, ["email", "password"])) {
+    controller.login(req.body.email, req.body.password, function(user, token) {
+      res.header("Content-Type", "application/json");
+      res.send(JSON.stringify({user: user, token: token}));
+    }, function() {
+      res.send("Error: Authentication failed");
+    });
+  } else {
+    res.send("Error: The email or password parameters were not given");
+  }
+});
 
 // TODO: Add POST /users request that calls controller.register
 
