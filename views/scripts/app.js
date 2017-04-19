@@ -1,4 +1,3 @@
-console.log("app");
 console.log("User:" + localStorage.getItem("user"));
 console.log("Token:" + localStorage.getItem("token"));
 
@@ -17,10 +16,20 @@ function getStores(callback) {
 
 function printStores(stores) {
   var parent = document.getElementById('storeList');
+
   for(var i = 0; i < stores.length; ++i) {
-    console.log(stores[i]);
+    var storeId = document.createElement("div");
+    storeId.appendChild(document.createTextNode(stores[i]["_id"]));
+    storeId.className = "storeList__id";
+
+    var storeLabel = document.createElement("div");
+    storeLabel.appendChild(document.createTextNode(stores[i]["label"]));
+    storeLabel.className = "storeList__label";
+
+
     var storeItem = document.createElement("li");
-    storeItem.appendChild(document.createTextNode(stores[i].label));
+    storeItem.appendChild(storeId);
+    storeItem.appendChild(storeLabel);
     storeItem.className = "storeList__item";
     parent.appendChild(storeItem);
   }

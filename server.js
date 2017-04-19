@@ -86,19 +86,6 @@ app.post("/entries", function(req, res) {
   }
 });
 
-app.post("/stores", function(req, res) {
-  if(hasParameters(req.body, ["_owner", "token", "label"])) {
-    controller.authorise(req.body._owner, req.body.token, function() {
-      controller.addStore(req.body._owner, req.body.label);
-      res.send("{}");
-    }, function() {
-      res.send("Error: Authorisation failed");
-    });
-  } else {
-    res.send("Error: The _owner, token or label parameters were not given");
-  }
-});
-
 app.get("/stores", function(req, res) {
   if(hasParameters(req.query, ["_owner", "token"])) {
     controller.authorise(req.query._owner, req.query.token, function() {
@@ -113,7 +100,18 @@ app.get("/stores", function(req, res) {
   }
 });
 
-// TODO: Add POST /stores request that calls controller.addStore
+app.post("/stores", function(req, res) {
+  if(hasParameters(req.body, ["_owner", "token", "label"])) {
+    controller.authorise(req.body._owner, req.body.token, function() {
+      controller.addStore(req.body._owner, req.body.label);
+      res.send("{}");
+    }, function() {
+      res.send("Error: Authorisation failed");
+    });
+  } else {
+    res.send("Error: The _owner, token or label parameters were not given");
+  }
+});
 
 app.post("/sessions", function(req, res) {
   if(hasParameters(req.body, ["email", "password"])) {

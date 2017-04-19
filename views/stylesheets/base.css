@@ -72,6 +72,13 @@ a {
   font-size: 20px;
   margin: 5px 0; }
 
+.storeList__id {
+  display: inline-block;
+  width: 350px; }
+
+.storeList__label {
+  display: inline-block; }
+
 .section--stores .input {
   display: inline-block;
   margin-right: 5px;
