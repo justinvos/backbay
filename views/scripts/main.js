@@ -1,10 +1,21 @@
 console.log("test");
 //ReactDOM.render(<div>Hello World</div>, document.getElementById('container'));
 
-function clickLogin(callback) {
-  var email = "justinvosnz@gmail.com";
-  var password = "pokemon";
+function clickLogin() {
+  //var email = "justinvosnz@gmail.com";
+  var email = document.getElementById("emailInput").value;
+  //var password = "pokemon";
+  var password = document.getElementById("passwordInput").value;
 
+  login(email, password, function(user, token) {
+    console.log(user + " = " + token);
+    localStorage.setItem("user", user);
+    localStorage.setItem("token", token);
+    window.location = "/app";
+  });
+}
+
+function login(email, password, callback) {
   fetch("/sessions", {
     method: "post",
     headers: {
@@ -14,7 +25,7 @@ function clickLogin(callback) {
     body: "email=" + email + "&password=" + password
   }).then(function(response) {
     return response.json().then(function(json) {
-      callback(json);
+      callback(json.user, json.token);
     });
   });
 }

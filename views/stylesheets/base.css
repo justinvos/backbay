@@ -56,4 +56,26 @@ a {
 .section--login .button, .section--register .button {
   text-align: center; }
 
+.section--stores {
+  margin: 10px auto;
+  width: 1000px; }
+
+.stores__title {
+  font-size: 28px;
+  margin: 20px 0; }
+
+#storeList {
+  list-style: none;
+  margin: 0; }
+
+.storeList__item {
+  font-size: 20px;
+  margin: 5px 0; }
+
+.section--stores .input {
+  display: inline-block;
+  margin-right: 5px;
+  padding: 15px 10px;
+  width: 350px; }
+
 /*# sourceMappingURL=base.css.map */
