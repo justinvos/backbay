@@ -65,7 +65,26 @@ app.get("/entries", function(req, res) {
   }
 });
 
-// TODO: Add POST /entries request that calls controller.addEntry
+app.post("/entries", function(req, res) {
+  if(hasParameters(req.body, ["_owner", "token", "_store"])) {
+    controller.authorise(req.body._owner, req.body.token, function() {
+      var owner = req.body._owner;
+      var store = req.body._store;
+
+      var data = req.body;
+      delete data["_owner"];
+      delete data["token"];
+      delete data["_store"];
+
+      controller.addEntry(owner, store, data);
+      res.send("{}");
+    }, function() {
+      res.send("Error: Authorisation failed");
+    });
+  } else {
+    res.send("Error: The _owner, token or _store parameters were not given");
+  }
+});
 
 app.post("/stores", function(req, res) {
   if(hasParameters(req.body, ["_owner", "token", "label"])) {
