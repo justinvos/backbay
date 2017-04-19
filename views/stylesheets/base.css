@@ -17,6 +17,13 @@ a {
 .head__title:hover {
   color: #0C0E0F; }
 
+.link {
+  color: #f44336;
+  padding: 5px 0; }
+
+.link:hover {
+  text-decoration: underline; }
+
 .button {
   background: #f44336;
   color: white;

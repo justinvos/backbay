@@ -36,7 +36,18 @@ function printStores(stores) {
 }
 
 function addStore(label, callback) {
-  //TODO: Add fetch call to send POST request to /stores
+  fetch("/stores", {
+    method: "post",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
+    },
+    body: "_owner=" + localStorage.getItem("user") + "&token=" + localStorage.getItem("token") + "&label=" + label
+  }).then(function(response) {
+    return response.json().then(function(json) {
+      callback({});
+    });
+  });
 }
 
 function clickAddStore() {
