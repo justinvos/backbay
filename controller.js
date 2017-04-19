@@ -94,7 +94,10 @@ function getEntries(user, store, callback) {
   });
 }
 
-// TODO: Add addStore function
+function addStore(owner, label) {
+  model.createStore(model.ObjectId(owner), label);
+}
+
 
 function getStores(owner, callback) {
   model.readStores(model.ObjectId(owner), function(docs) {
@@ -109,4 +112,5 @@ exports.login = login;
 exports.authorise = authorise;
 exports.addEntry = addEntry;
 exports.getEntries = getEntries;
+exports.addStore = addStore;
 exports.getStores = getStores;
