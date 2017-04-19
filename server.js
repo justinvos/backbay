@@ -127,6 +127,16 @@ app.post("/sessions", function(req, res) {
 });
 
 // TODO: Add POST /users request that calls controller.register
+app.post("/users", function(req, res) {
+  if(hasParameters(req.body, ["email", "password"])) {
+    controller.register(req.body.email, req.body.password);
+    res.header("Content-Type", "application/json");
+    res.send("{}");
+  } else {
+    res.send("Error: The email or password parameters were not given");
+  }
+});
+
 
 /*
   ## Server start code

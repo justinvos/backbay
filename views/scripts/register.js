@@ -1,20 +1,17 @@
 console.log("test");
 //ReactDOM.render(<div>Hello World</div>, document.getElementById('container'));
 
-function clickLogin() {
+function clickRegister() {
   var email = document.getElementById("emailInput").value;
   var password = document.getElementById("passwordInput").value;
 
-  login(email, password, function(user, token) {
-    console.log(user + " = " + token);
-    localStorage.setItem("user", user);
-    localStorage.setItem("token", token);
-    window.location = "/app";
+  register(email, password, function() {
+    window.location = "/";
   });
 }
 
-function login(email, password, callback) {
-  fetch("/sessions", {
+function register(email, password, callback) {
+  fetch("/users", {
     method: "post",
     headers: {
       Accept: "application/json",
@@ -23,7 +20,7 @@ function login(email, password, callback) {
     body: "email=" + email + "&password=" + password
   }).then(function(response) {
     return response.json().then(function(json) {
-      callback(json.user, json.token);
+      callback();
     });
   });
 }

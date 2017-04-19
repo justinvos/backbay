@@ -52,6 +52,11 @@ function generateToken() {
   ## Public Functions
 */
 
+function register(email, password) {
+  var salt = generateSalt();
+  model.createUser(email, md5(password + salt), salt);
+}
+
 function login(email, password, success, failure) {
   authenticate(email, password, function(user) {
     if(user != null) {
@@ -107,7 +112,7 @@ function getStores(owner, callback) {
 
 // TODO: Add register function
 
-
+exports.register = register;
 exports.login = login;
 exports.authorise = authorise;
 exports.addEntry = addEntry;
