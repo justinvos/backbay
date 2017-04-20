@@ -67,7 +67,7 @@ app.get("/entries", function(req, res) {
 
 app.post("/entries", function(req, res) {
   if(hasParameters(req.body, ["_account", "_token", "_store"])) {
-    controller.authorise(req.body._owner, req.body._token, function() {
+    controller.authorise(req.body._account, req.body._token, function() {
       var owner = req.body._account;
       var store = req.body._store;
 
@@ -82,7 +82,7 @@ app.post("/entries", function(req, res) {
       res.send("Error: Authorisation failed");
     });
   } else {
-    res.send("Error: The _owner, token or _store parameters were not given");
+    res.send("Error: The _account, _token or _store parameters were not given");
   }
 });
 
