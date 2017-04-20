@@ -52,9 +52,9 @@ app.get('/app', function(req, res) {
 */
 
 app.get("/entries", function(req, res) {
-  if(hasParameters(req.query, ["_user", "token", "_store"])) {
-    controller.authorise(req.query._user, req.query.token, function() {
-      controller.getEntries(req.query._user, req.query._store, function(docs) {
+  if(hasParameters(req.query, ["_account", "_token", "_store"])) {
+    controller.authorise(req.query._account, req.query._token, function() {
+      controller.getEntries(req.query._account, req.query._store, function(docs) {
         res.send(docs);
       });
     }, function() {
@@ -66,14 +66,14 @@ app.get("/entries", function(req, res) {
 });
 
 app.post("/entries", function(req, res) {
-  if(hasParameters(req.body, ["_owner", "token", "_store"])) {
-    controller.authorise(req.body._owner, req.body.token, function() {
-      var owner = req.body._owner;
+  if(hasParameters(req.body, ["_account", "_token", "_store"])) {
+    controller.authorise(req.body._owner, req.body._token, function() {
+      var owner = req.body._account;
       var store = req.body._store;
 
       var data = req.body;
-      delete data["_owner"];
-      delete data["token"];
+      delete data["_account"];
+      delete data["_token"];
       delete data["_store"];
 
       controller.addEntry(owner, store, data);
@@ -126,7 +126,6 @@ app.post("/sessions", function(req, res) {
   }
 });
 
-// TODO: Add POST /users request that calls controller.register
 app.post("/users", function(req, res) {
   if(hasParameters(req.body, ["email", "password"])) {
     controller.register(req.body.email, req.body.password);

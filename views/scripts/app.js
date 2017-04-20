@@ -1,5 +1,8 @@
-console.log("User:" + localStorage.getItem("user"));
+console.log("Account:" + localStorage.getItem("user"));
 console.log("Token:" + localStorage.getItem("token"));
+document.getElementById("accountSpan").innerHTML = localStorage.getItem("user");
+document.getElementById("tokenSpan").innerHTML = localStorage.getItem("token");
+
 
 function getStores(callback) {
   fetch("/stores?_owner=" + localStorage.getItem("user") + "&token=" + localStorage.getItem("token"), {
